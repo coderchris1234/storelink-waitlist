@@ -49,7 +49,7 @@ function isToday(iso) {
 export default function UserTable({ users, loading, error, onView }) {
   if (loading) return <div className={styles.state}>Loading signups...</div>
   if (error) return <div className={styles.state}>Failed to load data.</div>
-  if (!users.length) return <div className={styles.state}>No users found.</div>
+  if (!users.length) return <div className={styles.state}>No signups yet. Check back soon.</div>
 
   return (
     <div className={styles.wrapper}>
@@ -59,19 +59,21 @@ export default function UserTable({ users, loading, error, onView }) {
             <th>Name</th>
             <th>Phone</th>
             <th>Business Type</th>
+            <th>Platform</th>
             <th>Date Joined</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {users.map(user => (
-            <tr key={user.id} className={isToday(user.createdAt) ? styles.newRow : ''}>
+            <tr key={user._id} className={isToday(user.createdAt) ? styles.newRow : ''}>
               <td className={styles.name}>
                 {user.name}
                 {isToday(user.createdAt) && <span className={styles.newBadge}>New</span>}
               </td>
-              <td><CopyPhone phone={user.phone} /></td>
+              <td><CopyPhone phone={user.phoneNumber} /></td>
               <td><TypeTag type={user.businessType} /></td>
+              <td>{user.currentPlatform ?? '—'}</td>
               <td>{formatDate(user.createdAt)}</td>
               <td>
                 <button className={styles.viewBtn} onClick={() => onView(user)}>

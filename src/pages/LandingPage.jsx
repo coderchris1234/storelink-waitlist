@@ -1,21 +1,50 @@
 import { useState } from 'react'
+import axios from 'axios'
+
+const PLATFORMS = ['WhatsApp', 'Instagram', 'Facebook', 'Twitter/X']
 
 export default function LandingPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const [form, setForm] = useState({
     name: '',
     phone: '',
     businessType: '',
-    challenge: '',
+    currentPlatform: '',
+    notes: '',
   })
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handlePhoneChange = (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 11)
+    setForm({ ...form, phone: digits })
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setLoading(true)
+    setError(null)
+
+    const payload = {
+      name: form.name,
+      phoneNumber: form.phone.replace(/\D/g, ''),
+      businessType: form.businessType,
+      currentPlatform: form.currentPlatform,
+      notes: form.notes,
+    }
+
+    try {
+      await axios.post('https://store-api-ds7z.onrender.com/api/v1/create-info', payload)
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.response?.data?.message ?? 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -113,7 +142,7 @@ export default function LandingPage() {
         ) : (
           <form className="waitlist-form" onSubmit={handleSubmit} noValidate>
             <div className="field">
-              <label htmlFor="name">Full Name</label>
+              <label htmlFor="name">Full Name <span className="required-mark">*</span></label>
               <span className="field-hint">So we know who you are</span>
               <input
                 id="name"
@@ -127,7 +156,7 @@ export default function LandingPage() {
             </div>
 
             <div className="field">
-              <label htmlFor="phone">Phone Number (WhatsApp)</label>
+              <label htmlFor="phone">Phone Number (WhatsApp) <span className="required-mark">*</span></label>
               <span className="field-hint">We will contact you here when your store is ready</span>
               <input
                 id="phone"
@@ -135,13 +164,14 @@ export default function LandingPage() {
                 type="tel"
                 placeholder="e.g. 08012345678"
                 value={form.phone}
-                onChange={handleChange}
+                onChange={handlePhoneChange}
+                maxLength={11}
                 required
               />
             </div>
 
             <div className="field">
-              <label htmlFor="businessType">Business Type</label>
+              <label htmlFor="businessType">Business Type <span className="required-mark">*</span></label>
               <select
                 id="businessType"
                 name="businessType"
@@ -150,31 +180,47 @@ export default function LandingPage() {
                 required
               >
                 <option value="" disabled>Select your business type</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Food">Food</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Services">Services</option>
-                <option value="Other">Other</option>
+                <option value="Vendor">Vendor</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Artisan">Artisan</option>
+                <option value="Service Provider">Service Provider</option>
+                <option value="Reseller">Reseller</option>
               </select>
             </div>
 
             <div className="field">
-              <label htmlFor="challenge">
-                What is your biggest challenge selling online today?{' '}
-                <span className="optional">(optional)</span>
+              <label htmlFor="currentPlatform">Where do you currently sell? <span className="required-mark">*</span></label>
+              <select
+                id="currentPlatform"
+                name="currentPlatform"
+                value={form.currentPlatform}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>Select a platform</option>
+                {PLATFORMS.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+
+            <div className="field">
+              <label htmlFor="notes">
+                What is your biggest challenge selling online today? <span className="required-mark">*</span>
               </label>
               <textarea
-                id="challenge"
-                name="challenge"
+                id="notes"
+                name="notes"
                 rows={3}
                 placeholder="Tell us what's holding you back..."
-                value={form.challenge}
+                value={form.notes}
                 onChange={handleChange}
+                required
               />
             </div>
 
-            <button type="submit" className="btn btn-primary btn-full">
-              Reserve My Spot
+            {error && <p className="form-error" role="alert">{error}</p>}
+
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
+              {loading ? 'Submitting...' : 'Reserve My Spot'}
             </button>
           </form>
         )}

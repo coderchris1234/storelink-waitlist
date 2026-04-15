@@ -290,6 +290,10 @@
   opacity: 0.6;
 }
 
+.required-mark {
+  color: #dc2626;
+}
+
 .field input,
 .field select,
 .field textarea {
@@ -313,6 +317,16 @@
 
 .field textarea {
   resize: vertical;
+}
+
+.form-error {
+  font-size: 14px;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 0;
 }
 
 .success-msg {

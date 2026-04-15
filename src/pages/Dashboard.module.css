@@ -41,6 +41,21 @@
   flex-wrap: wrap;
 }
 
+.statsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statsLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #6b7280;
+  margin: 0;
+}
+
 .toolbar {
   display: flex;
   gap: 12px;

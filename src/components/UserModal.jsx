@@ -32,7 +32,7 @@ export default function UserModal({ user, onClose }) {
 
         <div className={styles.body}>
           <Row label="Name" value={user.name} />
-          <Row label="Phone (WhatsApp)" value={user.phone} mono />
+          <Row label="Phone (WhatsApp)" value={user.phoneNumber} mono />
           <Row label="Business Type"
             value={
               <span className={styles.tag} style={{ '--tag-color': color }}>
@@ -51,7 +51,7 @@ export default function UserModal({ user, onClose }) {
 
         <div className={styles.footer}>
           <a
-            href={`https://wa.me/${user.phone}`}
+            href={`https://wa.me/${user.phoneNumber}`}
             target="_blank"
             rel="noreferrer"
             className={styles.waBtn}

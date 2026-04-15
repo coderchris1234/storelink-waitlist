@@ -5,15 +5,6 @@ import StatsCard from '../components/StatsCard'
 import UserTable from '../components/UserTable'
 import UserModal from '../components/UserModal'
 
-// Mock data for development — remove when real API is ready
-const MOCK_USERS = [
-  { id: '1', name: 'Amaka Obi', phone: '2348012345678', businessType: 'Fashion', notes: 'I struggle with tracking orders', createdAt: new Date().toISOString() },
-  { id: '2', name: 'Chidi Nwosu', phone: '2348098765432', businessType: 'Food', notes: 'Customers always ask for price list', createdAt: new Date(Date.now() - 86400000).toISOString() },
-  { id: '3', name: 'Fatima Bello', phone: '2347011223344', businessType: 'Electronics', notes: '', createdAt: new Date(Date.now() - 2 * 86400000).toISOString() },
-  { id: '4', name: 'Tunde Adeyemi', phone: '2348155667788', businessType: 'Services', notes: 'Hard to show portfolio', createdAt: new Date(Date.now() - 3 * 86400000).toISOString() },
-  { id: '5', name: 'Ngozi Eze', phone: '2349033445566', businessType: 'Fashion', notes: 'Repeat questions every day', createdAt: new Date(Date.now() - 4 * 86400000).toISOString() },
-]
-
 const today = new Date().toDateString()
 
 export default function Dashboard() {
@@ -25,12 +16,12 @@ export default function Dashboard() {
   const [selectedUser, setSelectedUser] = useState(null)
 
   useEffect(() => {
-    axios.get('/api/waitlist')
+    axios.get('https://store-api-ds7z.onrender.com/api/v1/get-users')
       .then(res => {
         const data = res.data
-        setUsers(Array.isArray(data) ? data : data.users ?? data.data ?? MOCK_USERS)
+        setUsers(Array.isArray(data) ? data : data.users ?? data.data ?? [])
       })
-      .catch(() => setUsers(MOCK_USERS))
+      .catch(() => setUsers([]))
       .finally(() => setLoading(false))
   }, [])
 
@@ -43,17 +34,28 @@ export default function Dashboard() {
     return users
       .filter(u => {
         const q = search.toLowerCase()
-        return u.name.toLowerCase().includes(q) || u.phone.includes(q)
+        return u.name.toLowerCase().includes(q) || String(u.phoneNumber).includes(q)
       })
       .filter(u => filterType === 'All' || u.businessType === filterType)
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   }, [users, search, filterType])
 
-  const stats = useMemo(() => ({
-    total: users.length,
-    today: users.filter(u => new Date(u.createdAt).toDateString() === today).length,
-    fashion: users.filter(u => u.businessType === 'Fashion').length,
-  }), [users])
+  const stats = useMemo(() => {
+    const byType = {}
+    const byPlatform = {}
+    users.forEach(u => {
+      byType[u.businessType] = (byType[u.businessType] || 0) + 1
+      if (u.currentPlatform) {
+        byPlatform[u.currentPlatform] = (byPlatform[u.currentPlatform] || 0) + 1
+      }
+    })
+    return {
+      total: users.length,
+      today: users.filter(u => new Date(u.createdAt).toDateString() === today).length,
+      byType,
+      byPlatform,
+    }
+  }, [users])
 
   return (
     <div className={styles.page}>
@@ -69,7 +71,24 @@ export default function Dashboard() {
         <div className={styles.stats}>
           <StatsCard label="Total Signups" value={stats.total} />
           <StatsCard label="Today's Signups" value={stats.today} accent />
-          <StatsCard label="Fashion Sellers" value={stats.fashion} />
+        </div>
+
+        <div className={styles.statsGroup}>
+          <p className={styles.statsLabel}>By Business Type</p>
+          <div className={styles.stats}>
+            {Object.entries(stats.byType).map(([type, count]) => (
+              <StatsCard key={type} label={type} value={count} />
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.statsGroup}>
+          <p className={styles.statsLabel}>By Platform</p>
+          <div className={styles.stats}>
+            {Object.entries(stats.byPlatform).map(([platform, count]) => (
+              <StatsCard key={platform} label={platform} value={count} />
+            ))}
+          </div>
         </div>
 
         {/* Filters */}
