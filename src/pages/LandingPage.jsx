@@ -231,7 +231,7 @@ export default function LandingPage() {
         <h2>Built for small businesses like yours</h2>
         <p className="section-sub">
           We are building StoreLink specifically for sellers who run their business on WhatsApp and Instagram.
-          This is not for big companies — it is for everyday sellers.
+          Whether you are just starting out or already growing — StoreLink is built to move with you.
         </p>
       </section>
 
@@ -244,6 +244,7 @@ export default function LandingPage() {
       {/* FOOTER */}
       <footer className="footer">
         <p>© {new Date().getFullYear()} StoreLink. Built for Nigerian small businesses.</p>
+        <p>Contact us: <a href="mailto:christobelnwachukwu@gmail.com">christobelnwachukwu@gmail.com</a> · <a href="tel:09026161344">09026161344</a></p>
       </footer>
     </>
   )
