@@ -411,8 +411,8 @@ export default function LandingPage() {
         <span className="footer-logo">MyStoreLink</span>
         <span className="footer-copy">© {new Date().getFullYear()} MyStoreLink. Built for Nigerian small businesses.</span>
         <div className="footer-contact">
-          <a href="mailto:ceo@mystorelink.shop">
-            <IoMailOutline size={15} /> ceo@mystorelink.shop
+          <a href="mailto:christobelnwachukwu@gmail.com">
+            <IoMailOutline size={15} /> christobelnwachukwu@gmail.com
           </a>
           <a href="tel:09026161344">
             <IoCallOutline size={15} /> 09026161344
