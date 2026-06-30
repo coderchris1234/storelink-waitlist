@@ -72,6 +72,14 @@ export default function LandingPage() {
     setLoading(true)
     setError(null)
 
+    const { name, email, phone, businessType, currentPlatform, notes } = form
+
+    if (!name.trim() || !email.trim() || !phone.trim() || !businessType || !currentPlatform || !notes.trim()) {
+      setError('Please fill in all fields before submitting.')
+      setLoading(false)
+      return
+    }
+
     const payload = {
       name: form.name,
       email: form.email,
