@@ -32,6 +32,7 @@ export default function UserModal({ user, onClose }) {
 
         <div className={styles.body}>
           <Row label="Name" value={user.name} />
+          <Row label="Email" value={user.email ?? '—'} />
           <Row label="Phone (WhatsApp)" value={user.phoneNumber} mono />
           <Row label="Business Type"
             value={

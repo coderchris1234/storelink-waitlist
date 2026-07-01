@@ -58,8 +58,10 @@ export default function UserTable({ users, loading, error, onView }) {
           <tr>
             <th>Name</th>
             <th>Phone</th>
+            <th>Email</th>
             <th>Business Type</th>
             <th>Platform</th>
+            <th>Challenge</th>
             <th>Date Joined</th>
             <th></th>
           </tr>
@@ -72,8 +74,10 @@ export default function UserTable({ users, loading, error, onView }) {
                 {isToday(user.createdAt) && <span className={styles.newBadge}>New</span>}
               </td>
               <td><CopyPhone phone={user.phoneNumber} /></td>
+              <td className={styles.emailCell}>{user.email ?? '—'}</td>
               <td><TypeTag type={user.businessType} /></td>
               <td>{user.currentPlatform ?? '—'}</td>
+              <td className={styles.notesCell}>{user.notes ?? '—'}</td>
               <td>{formatDate(user.createdAt)}</td>
               <td>
                 <button className={styles.viewBtn} onClick={() => onView(user)}>

@@ -116,6 +116,24 @@
   color: #aa3bff;
 }
 
+.notesCell {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.emailCell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  color: #374151;
+}
+
 .state {
   padding: 48px;
   text-align: center;

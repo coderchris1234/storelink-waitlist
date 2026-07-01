@@ -1,11 +1,33 @@
 import { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
+import { IoDownloadOutline } from 'react-icons/io5'
 import styles from './Dashboard.module.css'
 import StatsCard from '../components/StatsCard'
 import UserTable from '../components/UserTable'
 import UserModal from '../components/UserModal'
 
 const today = new Date().toDateString()
+
+function ExportCSV(users) {
+  const headers = ['Name', 'Phone', 'Email', 'Business Type', 'Platform', 'Challenge', 'Date Joined']
+  const rows = users.map(u => [
+    u.name,
+    u.phoneNumber,
+    u.email ?? '',
+    u.businessType,
+    u.currentPlatform ?? '',
+    (u.notes ?? '').replace(/,/g, ';'), // avoid breaking CSV with commas
+    new Date(u.createdAt).toLocaleDateString('en-NG'),
+  ])
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n')
+  const blob = new Blob([csv], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `mystorelink-waitlist-${new Date().toISOString().slice(0, 10)}.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
 export default function Dashboard() {
   const [users, setUsers] = useState([])
@@ -64,6 +86,15 @@ export default function Dashboard() {
           <h1 className={styles.title}>StoreLink Waitlist Dashboard</h1>
           <p className={styles.sub}>Manage early users</p>
         </div>
+        <button
+          className={styles.exportBtn}
+          onClick={() => ExportCSV(users)}
+          disabled={!users.length}
+          title="Download as CSV"
+        >
+          <IoDownloadOutline size={16} />
+          Export CSV
+        </button>
       </header>
 
       <main className={styles.main}>
