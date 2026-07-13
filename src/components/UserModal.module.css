@@ -95,10 +95,13 @@
 .footer {
   padding: 16px 24px;
   border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 10px;
 }
 
 .waBtn {
   display: block;
+  flex: 1;
   text-align: center;
   background: #25d366;
   color: #fff;
@@ -112,4 +115,23 @@
 
 .waBtn:hover {
   opacity: 0.88;
+}
+
+.emailBtn {
+  display: block;
+  flex: 1;
+  text-align: center;
+  background: #f3f4f6;
+  color: #111827;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  transition: background 0.2s;
+}
+
+.emailBtn:hover {
+  background: #e5e7eb;
 }

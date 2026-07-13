@@ -59,6 +59,14 @@ export default function UserModal({ user, onClose }) {
           >
             Message on WhatsApp
           </a>
+          {user.email && (
+            <a
+              href={`mailto:${user.email}`}
+              className={styles.emailBtn}
+            >
+              Send Email
+            </a>
+          )}
         </div>
       </div>
     </div>
