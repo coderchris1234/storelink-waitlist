@@ -282,7 +282,8 @@ export default function LandingPage() {
                   <input
                     id="phone"
                     name="phone"
-                    type="tel"
+                    type="text"
+                    inputMode="numeric"
                     placeholder="e.g. 08012345678"
                     value={form.phone}
                     onChange={handlePhoneChange}
